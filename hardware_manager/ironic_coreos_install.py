@@ -12,11 +12,13 @@
 
 import json
 import os
+import pprint
 import subprocess
 
 from ironic_lib import disk_utils
 from ironic_python_agent import errors
 from ironic_python_agent import hardware
+import libnmstate
 from oslo_log import log
 import tenacity
 
@@ -62,11 +64,24 @@ class CoreOSInstallHardwareManager(hardware.HardwareManager):
 
         meta_data = configdrive.get('meta_data') or {}
         ignition = configdrive.get('user_data')
+        network_data = configdrive.get('network_data')
+
+        if network_data:
+            # This has to happen before installation since coreos-installer
+            # uses existing network files.
+            LOG.debug('Applying networking:\n%s', pprint.pformat(network_data))
+            try:
+                libnmstate.apply(network_data)
+            except Exception as e:
+                LOG.exception(
+                    "Cannot apply the requested network configuration")
+                raise errors.DeploymentError(
+                    f"Cannot apply the requested network configuration: {e}")
 
         args = ['--preserve-on-error']  # We have cleaning to do this
 
         if ignition:
-            LOG.debug('Will use ignition %s', ignition)
+            LOG.debug('Will use ignition:\n%s', pprint.pformat(ignition))
             dest = os.path.join(ROOT_MOUNT_PATH, 'tmp', 'ironic.ign')
             with open(dest, 'wt') as fp:
                 if isinstance(ignition, str):
