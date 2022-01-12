@@ -80,7 +80,12 @@ class CoreOSInstallHardwareManager(hardware.HardwareManager):
         else:
             args += ['--offline']
 
-        copy_network = meta_data.get('coreos_copy_network', True)
+        ip_args = os.getenv('IPA_COREOS_IP_OPTIONS')
+        if ip_args:
+            args += ['--append-karg', ip_args]
+
+        copy_network = meta_data.get('coreos_copy_network',
+                os.getenv('IPA_COREOS_COPY_NETWORK', '').lower() == 'true')
         if copy_network:
             args += ['--copy-network']
 
