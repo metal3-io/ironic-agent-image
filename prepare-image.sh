@@ -28,6 +28,9 @@ rpm -q subscription-manager && \
 # Pbr pulls in Git (30+ MiB), but actually only uses it in development context.
 rpm -q git-core && rpm -e --nodeps git-core || true
 
+# Create ironic-python-agent config dir
+mkdir -p /etc/ironic-python-agent
+
 dnf clean all
 rm -rf /var/cache/{yum,dnf}/*
 

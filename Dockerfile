@@ -12,7 +12,6 @@ RUN dnf install -y python3 python3-requests && \
     curl -Lfv https://raw.githubusercontent.com/openstack/tripleo-repos/master/plugins/module_utils/tripleo_repos/main.py | python3 - -b master current-tripleo && \
     sed -i 's/>=.*$//g' /tmp/${PKGS_LIST} && \
     prepare-image.sh && \
-    mkdir -p /etc/ironic-python-agent && \
     rm -f /bin/prepare-image.sh
 
 COPY hardware_manager /tmp/hardware_manager
