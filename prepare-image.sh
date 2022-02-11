@@ -21,6 +21,10 @@ if [[ ! -z ${PATCH_LIST:-} ]]; then
 fi
 rm -f /bin/patch-image.sh
 
+# NOTE(elfosardo): we need to reinstall tzdata as the base CS9 container removes
+# its content, for more info see https://bugzilla.redhat.com/show_bug.cgi?id=2052861
+dnf reinstall -y tzdata
+
 # No subscriptions are required (or possible) in this container.
 rpm -q subscription-manager && \
     dnf remove -y subscription-manager dnf-plugin-subscription-manager || true
