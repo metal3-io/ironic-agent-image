@@ -4,5 +4,7 @@ approvers:
   - dtantsur
   - elfosardo
   - iurygregory
-  - hardys
   - zaneb
+
+emeritus_approvers:
+  - hardys
