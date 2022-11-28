@@ -1,6 +1,5 @@
 approvers:
   - bfournie
-  - derekhiggins
   - dtantsur
   - elfosardo
   - iurygregory
@@ -8,3 +7,4 @@ approvers:
 
 emeritus_approvers:
   - hardys
+  - derekhiggins
